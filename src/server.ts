@@ -1,25 +1,33 @@
 import express, { Application } from "express";
 import socketIO, { Server as SocketIOServer } from "socket.io";
-import { createServer, Server as HTTPServer } from "http";
+//import { createServer, Server as HTTPServer } from "http";
+const http=require('https');
+const fs=require('fs');
+//const crypto=require('crypto');
+//const tls=require('tls');
 import path from "path";
 
 export class Server {
-  private httpServer: HTTPServer;
+ // private httpServer: HTTPServer;
   private app: Application;
   private io: SocketIOServer;
-
   private activeSockets: string[] = [];
-
-  private readonly DEFAULT_PORT = 5000;
-
+  private server;
+  private readonly DEFAULT_PORT = 443;
+  private credentials = {key: fs.readFileSync('client-key.pem'), cert: fs.readFileSync('client-cert.pem'),rejectUnauthorized:false};
+ 
   constructor() {
     this.initialize();
-  }
+     }
 
   private initialize(): void {
-    this.app = express();
-    this.httpServer = createServer(this.app);
-    this.io = socketIO(this.httpServer);
+
+     this.app = express();
+    // this.httpServer = createServer(this.app);
+    this.server=http.createServer(this.credentials, this.app)
+    // this.server.setSecure(this.credentials);
+    //this.httpServer.setSecure(this.credentials);
+    this.io = socketIO(this.server);
 
     this.configureApp();
     this.configureRoutes();
@@ -88,7 +96,7 @@ export class Server {
   }
 
   public listen(callback: (port: number) => void): void {
-    this.httpServer.listen(this.DEFAULT_PORT, () => {
+    this.server.listen(this.DEFAULT_PORT, () => {
       callback(this.DEFAULT_PORT);
     });
   }

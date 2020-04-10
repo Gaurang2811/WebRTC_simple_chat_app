@@ -63,7 +63,7 @@ function updateUserList(socketIds) {
   });
 }
 
-const socket = io.connect("localhost:5000");
+const socket = io.connect("192.168.1.9:443");
 
 socket.on("update-user-list", ({ users }) => {
   updateUserList(users);
