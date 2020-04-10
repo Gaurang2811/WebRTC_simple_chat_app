@@ -63,7 +63,7 @@ function updateUserList(socketIds) {
   });
 }
 
-const socket = io.connect("chat-app-poc.herokuapp.com:8443");
+const socket = io.connect("chat-app-poc.herokuapp.com:3000");
 
 socket.on("update-user-list", ({ users }) => {
   updateUserList(users);

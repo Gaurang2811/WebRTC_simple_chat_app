@@ -13,7 +13,7 @@ export class Server {
   private io: SocketIOServer;
   private activeSockets: string[] = [];
   private server;
-  private readonly DEFAULT_PORT = 8443;
+  private readonly DEFAULT_PORT = 3000;
   private credentials = {key: fs.readFileSync('client-key.pem'), cert: fs.readFileSync('client-cert.pem'),rejectUnauthorized:false};
  
   constructor() {
